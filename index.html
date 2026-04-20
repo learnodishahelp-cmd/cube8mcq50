@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ଅଷ୍ଟମ ଶ୍ରେଣୀ ଗଣିତ: ୫୦ MCQ କ୍ୱିଜ୍</title>
+    <style>
+        :root {
+            --primary: #4834d4;
+            --success: #2ecc71;
+            --error: #eb4d4b;
+            --dark: #130f40;
+            --light: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Kalinga', 'Odia', -apple-system, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        #quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        button {
+            padding: 14px;
+            font-size: 1rem;
+            border: 1.5px solid #dcdde1;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        button:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #f0f0ff;
+        }
+
+        button.correct {
+            background-color: var(--success) !important;
+            color: white;
+            border-color: var(--success);
+        }
+
+        button.wrong {
+            background-color: var(--error) !important;
+            color: white;
+            border-color: var(--error);
+        }
+
+        #explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f2f6;
+            border-left: 5px solid var(--primary);
+            display: none;
+            border-radius: 5px;
+        }
+
+        #next-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+            cursor: pointer;
+        }
+
+        #result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 2rem;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="quiz-content">
+        <div class="header">
+            <span id="progress">ପ୍ରଶ୍ନ 1/50</span>
+            <span id="score-display">ସ୍କୋର: 0</span>
+        </div>
+        <div class="question" id="question-text"></div>
+        <div class="options" id="options-container"></div>
+        <div id="explanation-box"></div>
+        <button id="next-btn" onclick="nextQuestion()">ପରବର୍ତ୍ତୀ ପ୍ରଶ୍ନ →</button>
+    </div>
+
+    <div id="result-screen">
+        <h2>ଫଳାଫଳ (Results)</h2>
+        <div class="score-circle" id="final-score">0</div>
+        <p id="remark" style="font-size: 1.2rem;"></p>
+        <button onclick="location.reload()" style="background:var(--primary); color:white; width:100%; border:none; padding:15px; border-radius:10px; cursor:pointer;">ପୁଣି ଆରମ୍ଭ କରନ୍ତୁ</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        // ପ୍ରଥମ ୨୦ଟି ପ୍ରଶ୍ନ
+        {q: "ଗୋଟିଏ ପୂର୍ଣ୍ଣ ବର୍ଗ ସଂଖ୍ୟାର ଏକକ ସ୍ଥାନରେ କେଉଁ ଅଙ୍କ ରହିପାରିବ ନାହିଁ?", o: ["0", "1", "2", "5"], a: 2, e: "ପୂର୍ଣ୍ଣ ବର୍ଗ ସଂଖ୍ୟା କେବେବି 2, 3, 7 କିମ୍ବା 8 ରେ ଶେଷ ହୁଏ ନାହିଁ।"},
+        {q: "15² ର ମୂଲ୍ୟ କେତେ?", o: ["125", "225", "625", "215"], a: 1, e: "15 × 15 = 225।"},
+        {q: "ପ୍ରଥମ 4 ଟି ଅଯୁଗ୍ମ ସଂଖ୍ୟାର ଯୋଗଫଳ କେତେ?", o: ["12", "15", "16", "20"], a: 2, e: "ଯୋଗଫଳ = n²। ଏଠାରେ 4² = 16।"},
+        {q: "ହାର୍ଡି-ରାମାନୁଜନ୍ ସଂଖ୍ୟାଟି କେଉଁଟି?", o: ["1728", "1729", "1829", "1629"], a: 1, e: "1729 ଦୁଇଟି ଘନର ଯୋଗଫଳ ରୂପେ ଦୁଇ ପ୍ରକାରେ ପ୍ରକାଶିତ ହୋଇପାରେ।"},
+        {q: "ଯଦି ସଂଖ୍ୟାର ଏକକ ଅଙ୍କ 3, ତେବେ ଘନର ଏକକ ଅଙ୍କ କେତେ?", o: ["3", "9", "7", "1"], a: 2, e: "3³ = 27, ତେଣୁ ଏକକ ଅଙ୍କ 7।"},
+        {q: "6.25 ର ବର୍ଗମୂଳ କେତେ?", o: ["2.5", "3.5", "0.25", "25"], a: 0, e: "2.5 × 2.5 = 6.25।"},
+        {q: "4² ଏବଂ 5² ମଧ୍ୟରେ କେତୋଟି ସ୍ୱାଭାବିକ ସଂଖ୍ୟା ଅଛି?", o: ["7", "8", "9", "10"], a: 1, e: "ସୂତ୍ର: 2n। 2 × 4 = 8।"},
+        {q: "64 ର ଘନମୂଳ କେତେ?", o: ["4", "8", "16", "2"], a: 0, e: "4 × 4 × 4 = 64।"},
+        {q: "ପୂର୍ଣ୍ଣ ବର୍ଗ ସଂଖ୍ୟାରେ ଶୂନ ସଂଖ୍ୟା ସର୍ବଦା କେଉଁଟି ହୋଇଥାଏ?", o: ["ଅଯୁଗ୍ମ", "ଯୁଗ୍ମ", "ତିନୋଟି", "ଗୋଟିଏ"], a: 1, e: "ଶୂନ ସଂଖ୍ୟା ସର୍ବଦା ଯୁଗ୍ମ ହେବା ଆବଶ୍ୟକ।"},
+        {q: "ପାଇଥାଗୋରାସ୍ ତ୍ରୟୀଟି କେଉଁଟି?", o: ["3, 4, 6", "5, 12, 13", "1, 2, 3", "2, 3, 4"], a: 1, e: "5² + 12² = 13²।"},
+        {q: "0.1 ର ଘନ କେତେ?", o: ["0.1", "0.01", "0.001", "0.0001"], a: 2, e: "0.1³ = 0.001।"},
+        {q: "8³ ର ଏକକ ସ୍ଥାନରେ କେଉଁ ଅଙ୍କ ରହିବ?", o: ["8", "4", "2", "6"], a: 2, e: "8³ = 512, ଏକକ ଅଙ୍କ 2।"},
+        {q: "121 କାହାର ବର୍ଗ?", o: ["10", "11", "12", "13"], a: 1, e: "11 × 11 = 121।"},
+        {q: "4 ଏବଂ 6 ଦ୍ୱାରା ବିଭାଜ୍ୟ ସବୁଠାରୁ ସାନ ବର୍ଗ ସଂଖ୍ୟା କେଉଁଟି?", o: ["24", "12", "36", "144"], a: 2, e: "ଲ.ସା.ଗୁ 12 ର ବର୍ଗ ଗୁଣିତକ 36।"},
+        {q: "10000 ର ବର୍ଗମୂଳ କେତେ?", o: ["10", "100", "1000", "10000"], a: 1, e: "√10000 = 100।"},
+        {q: "20³ ର ମୂଲ୍ୟ କେତେ?", o: ["400", "800", "4000", "8000"], a: 3, e: "20 × 20 × 20 = 8000।"},
+        {q: "36 ର ବର୍ଗମୂଳ କେତେ?", o: ["4", "5", "6", "9"], a: 2, e: "6 × 6 = 36।"},
+        {q: "ପ୍ରଥମ ତ୍ରିଭୁଜାକାର ସଂଖ୍ୟାଟି କେଉଁଟି?", o: ["0", "1", "2", "3"], a: 1, e: "ତ୍ରିଭୁଜାକାର ସଂଖ୍ୟା ଶୃଙ୍ଖଳା 1 ରୁ ଆରମ୍ଭ ହୁଏ।"},
+        {q: "7² ର ଏକକ ଅଙ୍କ କେତେ?", o: ["7", "4", "9", "1"], a: 2, e: "7 × 7 = 49।"},
+        {q: "9 ର ଘନ କେତେ?", o: ["81", "729", "100", "512"], a: 1, e: "9³ = 729।"},
+
+        // ନୂଆ ୩୦ଟି ପ୍ରଶ୍ନ (୨୧-୫୦)
+        {q: "1.2 ର ବର୍ଗ କେତେ?", o: ["1.44", "14.4", "0.144", "144"], a: 0, e: "1.2 × 1.2 = 1.44।"},
+        {q: "9² ଏବଂ 10² ମଧ୍ୟରେ କେତୋଟି ସଂଖ୍ୟା ଅଛି?", o: ["17", "18", "19", "20"], a: 1, e: "2n = 2 × 9 = 18।"},
+        {q: "6 ରେ ଶେଷ ହେଉଥିବା ସଂଖ୍ୟାର ବର୍ଗର ଏକକ ଅଙ୍କ କେତେ?", o: ["4", "6", "2", "8"], a: 1, e: "6² = 36, ଏକକ ଅଙ୍କ 6।"},
+        {q: "4 ର ଘନ କେତେ?", o: ["16", "32", "64", "128"], a: 2, e: "4³ = 64।"},
+        {q: "√1.69 ର ମୂଲ୍ୟ କେତେ?", o: ["1.3", "0.13", "13", "1.03"], a: 0, e: "1.3 × 1.3 = 1.69।"},
+        {q: "144 ର ବର୍ଗମୂଳ କେତେ?", o: ["11", "12", "13", "14"], a: 1, e: "12² = 144।"},
+        {q: "343 ର ଘନମୂଳ କେତେ?", o: ["3", "7", "9", "13"], a: 1, e: "7³ = 343।"},
+        {q: "√(16+9) ର ମୂଲ୍ୟ କେତେ?", o: ["7", "5", "12", "25"], a: 1, e: "√25 = 5।"},
+        {q: "√49 + √81 ର ଯୋଗଫଳ କେତେ?", o: ["130", "16", "15", "14"], a: 1, e: "7 + 9 = 16।"},
+        {q: "1234² ର ଏକକ ଅଙ୍କ କେତେ?", o: ["4", "8", "6", "2"], a: 2, e: "4² = 16, ତେଣୁ ଏକକ ଅଙ୍କ 6।"},
+        {q: "1² ଏବଂ 2² ମଧ୍ୟରେ କେତୋଟି ସଂଖ୍ୟା ଅଛି?", o: ["1", "2", "3", "0"], a: 1, e: "2n = 2 × 1 = 2। (ସଂଖ୍ୟା ଦୁଇଟି ହେଲା 2 ଏବଂ 3)"},
+        {q: "√√16 ର ମୂଲ୍ୟ କେତେ?", o: ["4", "2", "8", "1"], a: 1, e: "√16=4, √4=2।"},
+        {q: "2 ସହିତ କେଉଁ କ୍ଷୁଦ୍ରତମ ସଂଖ୍ୟା ଗୁଣିଲେ ଏହା ଏକ ବର୍ଗ ସଂଖ୍ୟା ହେବ?", o: ["1", "2", "3", "4"], a: 1, e: "2 × 2 = 4 (ଏକ ବର୍ଗ ସଂଖ୍ୟା)।"},
+        {q: "30² ର ମୂଲ୍ୟ କେତେ?", o: ["60", "90", "600", "900"], a: 3, e: "30 × 30 = 900।"},
+        {q: "216 ର ଘନମୂଳ କେତେ?", o: ["4", "5", "6", "7"], a: 2, e: "6³ = 216।"},
+        {q: "25² ର ମୂଲ୍ୟ କେତେ?", o: ["225", "625", "525", "425"], a: 1, e: "25 × 25 = 625।"},
+        {q: "3³ କୁ କ୍ରମିକ ଅଯୁଗ୍ମ ସଂଖ୍ୟାର ଯୋଗଫଳ ରୂପେ କିପରି ଲେଖାଯିବ?", o: ["1+3+5", "7+9+11", "5+7+9", "11+13+15"], a: 1, e: "7+9+11 = 27 = 3³।"},
+        {q: "√1 ର ମୂଲ୍ୟ କେତେ?", o: ["0", "1", "2", "-1"], a: 1, e: "1² = 1।"},
+        {q: "14² ର ମୂଲ୍ୟ କେତେ?", o: ["169", "196", "144", "186"], a: 1, e: "14 × 14 = 196।"},
+        {q: "5 ର ଘନ କେତେ?", o: ["25", "125", "75", "150"], a: 1, e: "5³ = 125।"},
+        {q: "512 ର ଘନମୂଳ କେତେ?", o: ["6", "7", "8", "9"], a: 2, e: "8³ = 512।"},
+        {q: "ଯଦି m=4, ତେବେ ପାଇଥାଗୋରାସ୍ ତ୍ରୟୀ (2m, m²-1, m²+1) କେତେ?", o: ["8, 15, 17", "4, 6, 8", "8, 10, 12", "5, 12, 13"], a: 0, e: "2(4)=8, 4²-1=15, 4²+1=17।"},
+        {q: "81 କ'ଣ ଏକ ପୂର୍ଣ୍ଣ ବର୍ଗ ସଂଖ୍ୟା?", o: ["ହଁ", "ନା"], a: 0, e: "9² = 81।"},
+        {q: "0.027 ର ଘନମୂଳ କେତେ?", o: ["0.3", "0.03", "3", "0.003"], a: 0, e: "0.3³ = 0.027।"},
+        {q: "ଯଦି ଏକ ସଂଖ୍ୟା 2 ରେ ଶେଷ ହୁଏ, ତେବେ ତା'ର ଘନ କେଉଁଥିରେ ଶେଷ ହେବ?", o: ["2", "4", "6", "8"], a: 3, e: "2³ = 8।"},
+        {q: "19² ର ମୂଲ୍ୟ କେତେ?", o: ["381", "361", "281", "391"], a: 1, e: "19 × 19 = 361।"},
+        {q: "1+3+5+7+9+11+13 ର ଯୋଗଫଳ କେତେ?", o: ["40", "49", "50", "36"], a: 1, e: "7 ଟି ସଂଖ୍ୟା, ତେଣୁ 7² = 49।"},
+        {q: "√0.16 ର ମୂଲ୍ୟ କେତେ?", o: ["0.4", "0.04", "4", "0.004"], a: 0, e: "0.4 × 0.4 = 0.16।"},
+        {q: "10³ ର ମୂଲ୍ୟ କେତେ?", o: ["100", "1000", "10000", "10"], a: 1, e: "10³ = 1000।"},
+        {q: "ଶେଷ ପ୍ରଶ୍ନ: √0 ର ମୂଲ୍ୟ କେତେ?", o: ["0", "1", "ଅସଂଜ୍ଞାୟିତ", "ନାହିଁ"], a: 0, e: "0² = 0।"}
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuestion() {
+        answered = false;
+        const q = quizData[currentIdx];
+        document.getElementById("progress").innerText = `ପ୍ରଶ୍ନ ${currentIdx + 1}/50`;
+        document.getElementById("question-text").innerText = q.q;
+        document.getElementById("explanation-box").style.display = "none";
+        document.getElementById("next-btn").style.display = "none";
+        
+        const container = document.getElementById("options-container");
+        container.innerHTML = "";
+        
+        q.o.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, btn) {
+        if (answered) return;
+        answered = true;
+        
+        const correct = quizData[currentIdx].a;
+        const allBtns = document.querySelectorAll("#options-container button");
+        
+        if (selected === correct) {
+            btn.classList.add("correct");
+            score++;
+            document.getElementById("score-display").innerText = `ସ୍କୋର: ${score}`;
+        } else {
+            btn.classList.add("wrong");
+            allBtns[correct].classList.add("correct");
+        }
+
+        const exp = document.getElementById("explanation-box");
+        exp.innerHTML = `<strong>ସମାଧାନ:</strong> ${quizData[currentIdx].e}`;
+        exp.style.display = "block";
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById("quiz-content").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("final-score").innerText = score;
+        
+        let remark = "";
+        const percent = (score / quizData.length) * 100;
+        if (percent >= 90) remark = "ଅତି ଚମତ୍କାର! ଆପଣ ଜଣେ ଗଣିତ ବିଜ୍ଞ।";
+        else if (percent >= 70) remark = "ବହୁତ ଭଲ! ଆପଣଙ୍କର ଚେଷ୍ଟା ପ୍ରଶଂସନୀୟ।";
+        else if (percent >= 40) remark = "ଭଲ ଚେଷ୍ଟା, କିନ୍ତୁ ଆଉ ଟିକେ ଅଭ୍ୟାସ କରନ୍ତୁ।";
+        else remark = "ବହିକୁ ଆଉ ଥରେ ଭଲ ଭାବେ ପଢନ୍ତୁ, ଆପଣ ନିଶ୍ଚୟ ଭଲ କରିବେ।";
+        
+        document.getElementById("remark").innerText = remark;
+    }
+
+    loadQuestion();
+</script>
+</body>
+</html>
